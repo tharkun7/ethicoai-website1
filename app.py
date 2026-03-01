@@ -78,9 +78,9 @@ elif selection == "Shop Products":
     
     # Hero Image of the Farm
     try:
-        st.image("durgivegan_goatfarm2.jpg", use_container_width=True, caption="Our No-Kill Goat Farm")
+        st.image("durgivegan_goatfarm2.png", use_container_width=True, caption="Our No-Kill Goat Farm")
     except:
-        st.warning("Hero image 'durgivegan_goatfarm2.jpg' not found.")
+        st.warning("Hero image 'durgivegan_goatfarm2.png' not found.")
 
     st.write("### Available Items")
     
