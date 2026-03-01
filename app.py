@@ -1,6 +1,4 @@
 import streamlit as st
-import sqlite3
-import pandas as pd
 from PIL import Image
 
 # 1. Page Configuration
@@ -10,144 +8,199 @@ st.set_page_config(
     layout="wide"
 )
 
-# 2. Custom CSS for Styling
+# 2. Advanced CSS for "Pop" and Prominent UI
 st.markdown("""
     <style>
+    /* Background and Main Font */
     .main {
-        background-color: #F4F7F2;
+        background-color: #F8FAF7;
     }
-    .stMarkdown h1 {
-        color: #2D5A27;
+    
+    /* Navigation Button Styling */
+    div[data-testid="stSidebarNav"] {
+        padding-top: 2rem;
     }
+    
+    /* Headers */
+    h1, h2, h3 {
+        color: #1B3F17 !important;
+        font-family: 'Trebuchet MS', sans-serif;
+    }
+
+    /* Prominent Info Cards */
     .ethical-card {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 15px;
-        border-left: 5px solid #4A7c44;
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+        background: linear-gradient(135deg, #ffffff 0%, #f0f9f0 100%);
+        padding: 30px;
+        border-radius: 20px;
+        border-left: 8px solid #4A7c44;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        margin-bottom: 2rem;
     }
+
+    /* Product Box "Pop" Effect */
     .product-box {
         background-color: #ffffff;
-        padding: 20px;
-        border-radius: 12px;
+        padding: 25px;
+        border-radius: 18px;
         text-align: center;
         border: 1px solid #e0e0e0;
-        height: 100%;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        height: 220px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
+    .product-box:hover {
+        transform: translateY(-5px);
+        border-color: #4A7c44;
+    }
+
+    /* Out of Stock Badge */
     .out-of-stock {
-        color: #d9534f;
+        color: #ffffff;
+        background-color: #CC3333;
         font-weight: bold;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         text-transform: uppercase;
-        margin-top: 10px;
+        padding: 4px 12px;
+        border-radius: 50px;
+        margin-top: 15px;
+    }
+    
+    /* Category Header Styles */
+    .category-header {
+        background-color: #2D5A27;
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Sidebar Navigation
-try:
-    st.sidebar.image("ethicoai_logo.jpg", use_container_width=True)
-except:
-    pass
-
-st.sidebar.title("EthicoAI Navigation")
-# Using a radio selector which acts as your primary button navigation
-selection = st.sidebar.radio("Go to:", [
-    "Home", 
-    "Shop Products from Goats", 
-    "Shop Products from Poultry",
-    "Farm History"
-])
+# 3. Sidebar Navigation (Prominent Radio Buttons)
+with st.sidebar:
+    try:
+        st.image("ethicoai_logo.jpg", use_container_width=True)
+    except:
+        st.title("EthicoAI")
+    
+    st.markdown("### 🌾 Marketplace")
+    selection = st.radio(
+        "Select Department:",
+        ["🏠 Home", "🐐 Shop Goat Products", "🐔 Shop Poultry Products", "🐟 Shop Organic Fertilizer"],
+        index=0
+    )
+    st.markdown("---")
+    st.write("© 2026 EthicoAI Co-operative")
 
 # 4. HOME SECTION
-if selection == "Home":
+if "🏠 Home" in selection:
     col1, col2 = st.columns([1, 4])
     with col1:
-        st.image("ethicoai_logo.jpg", width=150)
+        st.image("ethicoai_logo.jpg", width=180)
     with col2:
         st.title("EthicoAI")
         st.subheader("Farming with Intelligence, Rooted in Ethics.")
 
     st.divider()
-    st.header("Who we are?")
     st.markdown("""
     <div class="ethical-card">
-        <p style="font-size: 1.2rem; line-height: 1.6;">
-            We are <strong>AI (Artificial Intelligence) powered co-operative ethical farming and Animal Husbandry company</strong>. 
-            We provide compassion based animal and plant products to you.
+        <h2 style="margin-top:0;">Who we are?</h2>
+        <p style="font-size: 1.3rem; line-height: 1.7; color: #2D3E2B;">
+            We are an <strong>AI (Artificial Intelligence) powered co-operative ethical farming and Animal Husbandry company</strong>. 
+            We provide <strong>compassion based animal and plant products</strong> to you.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
+    # Value Props
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Model", "Co-operative")
+    c2.metric("Intelligence", "AI-Powered")
+    c3.metric("Ethics", "Compassion-Based")
+
 # 5. GOAT PRODUCTS SECTION
-elif selection == "Shop Products from Goats":
-    st.header("🐐 Goat Husbandry Products")
+elif "🐐 Shop Goat Products" in selection:
+    st.markdown('<div class="category-header"><h1>Goat Husbandry Shop</h1></div>', unsafe_allow_html=True)
     try:
-        st.image("durgivegan_goatfarm2.jpg", use_container_width=True, caption="Our No-Kill Goat Farm")
+        st.image("durgivegan_goatfarm2.jpg", use_container_width=True)
     except:
         st.warning("Landing image 'durgivegan_goatfarm2.jpg' not found.")
 
-    goat_products = [
-        {"name": "Goat Milk", "icon": "🥛"},
-        {"name": "Goat Curd", "icon": "🥣"},
-        {"name": "Goat Butter", "icon": "🧈"},
-        {"name": "Goat Ghee", "icon": "🍯"},
-        {"name": "Goat Paneer", "icon": "🧀"},
-        {"name": "Goat Cheese", "icon": "🍕"}
+    goat_items = [
+        {"n": "Goat Milk", "i": "🥛"}, {"n": "Goat Curd", "i": "🥣"},
+        {"n": "Goat Butter", "i": "🧈"}, {"n": "Goat Ghee", "i": "🍯"},
+        {"n": "Goat Paneer", "i": "🧀"}, {"n": "Goat Cheese", "i": "🍕"}
     ]
 
     cols = st.columns(3)
-    for i, p in enumerate(goat_products):
-        with cols[i % 3]:
+    for idx, item in enumerate(goat_items):
+        with cols[idx % 3]:
             st.markdown(f"""
             <div class="product-box">
-                <div style="font-size: 3rem;">{p['icon']}</div>
-                <h4 style="margin: 10px 0;">{p['name']}</h4>
-                <p class="out-of-stock">⚠️ Out of Stock</p>
+                <div style="font-size: 3.5rem;">{item['i']}</div>
+                <h4 style="margin: 10px 0;">{item['n']}</h4>
+                <div class="out-of-stock">Out of Stock</div>
             </div>
             """, unsafe_allow_html=True)
-            st.write(" ")
+            st.write("")
 
 # 6. POULTRY PRODUCTS SECTION
-elif selection == "Shop Products from Poultry":
-    st.header("🐔 Ethical Poultry Products")
+elif "🐔 Shop Poultry Products" in selection:
+    st.markdown('<div class="category-header"><h1>Ethical Poultry Shop</h1></div>', unsafe_allow_html=True)
     try:
-        st.image("ethicoai_cock.png", use_container_width=True, caption="Compassion-based Poultry Care")
+        st.image("ethicoai_cock.png", use_container_width=True)
     except:
         st.warning("Landing image 'ethicoai_cock.png' not found.")
 
-    poultry_products = [
-        "Unfertilized chicken eggs",
-        "Unfertilized chicken eggs (Desi)",
-        "Unfertilized quail eggs",
-        "Unfertilized turkey eggs",
-        "Unfertilized Chinese Hen eggs",
-        "Unfertilized Emu eggs",
-        "Unfertilized Ostrich eggs"
+    poultry_items = [
+        "Unfertilized chicken eggs", "Unfertilized chicken eggs (Desi)", 
+        "Unfertilized quail eggs", "Unfertilized turkey eggs", 
+        "Unfertilized Chinese Hen eggs", "Unfertilized Emu eggs", 
+        "Unfertilized Ostrich eggs", "Unfertilized duck eggs", 
+        "Unfertilized goose eggs"
     ]
 
     cols = st.columns(3)
-    for i, name in enumerate(poultry_products):
-        with cols[i % 3]:
+    for idx, name in enumerate(poultry_items):
+        with cols[idx % 3]:
             st.markdown(f"""
             <div class="product-box">
-                <div style="font-size: 3rem;">🥚</div>
+                <div style="font-size: 3.5rem;">🥚</div>
                 <h4 style="margin: 10px 0;">{name}</h4>
-                <p class="out-of-stock">⚠️ Out of Stock</p>
+                <div class="out-of-stock">Out of Stock</div>
             </div>
             """, unsafe_allow_html=True)
-            st.write(" ")
+            st.write("")
 
-# 7. FARM HISTORY (Database Bridge)
-elif selection == "Farm History":
-    st.header("📜 Farm History & Memory")
+# 7. ORGANIC FERTILIZER SECTION
+elif "🐟 Shop Organic Fertilizer" in selection:
+    st.markdown('<div class="category-header"><h1>Organic Fertilizer Shop</h1></div>', unsafe_allow_html=True)
     try:
-        conn = sqlite3.connect('memory.db')
-        df = pd.read_sql_query("SELECT * FROM history ORDER BY timestamp DESC LIMIT 15", conn)
-        st.dataframe(df, use_container_width=True)
-        conn.close()
+        st.image("ethicoai_fish.png", use_container_width=True)
     except:
-        st.info("Database connection active. No history logs found in 'memory.db' yet.")
+        st.warning("Landing image 'ethicoai_fish.png' not found.")
 
-st.sidebar.markdown("---")
-st.sidebar.write("© 2026 EthicoAI Co-operative")
+    fert_items = [
+        {"n": "Organic Fish Manure Liquid Serum", "i": "🧪"},
+        {"n": "Organic Goat Derived Fertilizer", "i": "🌿"},
+        {"n": "Organic Poultry Derived Fertilizer", "i": "🍂"},
+        {"n": "Organic Pig Derived Fertilizer", "i": "♻️"},
+        {"n": "Organic Cow Derived Fertilizer", "i": "🚜"}
+    ]
+
+    cols = st.columns(3)
+    for idx, item in enumerate(fert_items):
+        with cols[idx % 3]:
+            st.markdown(f"""
+            <div class="product-box">
+                <div style="font-size: 3.5rem;">{item['i']}</div>
+                <h4 style="margin: 10px 0;">{item['n']}</h4>
+                <div class="out-of-stock">Out of Stock</div>
+            </div>
+            """, unsafe_allow_html=True)
+            st.write("")
