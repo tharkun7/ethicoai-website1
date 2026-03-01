@@ -10,7 +10,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# 2. Custom CSS for a clean, ethical aesthetic
+# 2. Custom CSS for Styling
 st.markdown("""
     <style>
     .main {
@@ -32,28 +32,36 @@ st.markdown("""
         border-radius: 12px;
         text-align: center;
         border: 1px solid #e0e0e0;
+        height: 100%;
     }
     .out-of-stock {
         color: #d9534f;
         font-weight: bold;
         font-size: 0.85rem;
         text-transform: uppercase;
+        margin-top: 10px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Sidebar with Logo
+# 3. Sidebar Navigation
 try:
     st.sidebar.image("ethicoai_logo.jpg", use_container_width=True)
 except:
-    st.sidebar.info("Upload 'ethicoai_logo.jpg' to show logo.")
+    pass
 
-st.sidebar.title("EthicoAI")
-selection = st.sidebar.radio("Navigation", ["Home", "Shop Products", "Farm History"])
+st.sidebar.title("EthicoAI Navigation")
+# Using a radio selector which acts as your primary button navigation
+selection = st.sidebar.radio("Go to:", [
+    "Home", 
+    "Shop Products from Goats", 
+    "Shop Products from Poultry",
+    "Farm History"
+])
 
-# 4. Home Page
+# 4. HOME SECTION
 if selection == "Home":
-    col1, col2 = st.columns([1, 3])
+    col1, col2 = st.columns([1, 4])
     with col1:
         st.image("ethicoai_logo.jpg", width=150)
     with col2:
@@ -61,7 +69,6 @@ if selection == "Home":
         st.subheader("Farming with Intelligence, Rooted in Ethics.")
 
     st.divider()
-
     st.header("Who we are?")
     st.markdown("""
     <div class="ethical-card">
@@ -72,20 +79,15 @@ if selection == "Home":
     </div>
     """, unsafe_allow_html=True)
 
-# 5. Products Page
-elif selection == "Shop Products":
-    st.header("Our Ethical Products")
-    
-    # Hero Image of the Farm
+# 5. GOAT PRODUCTS SECTION
+elif selection == "Shop Products from Goats":
+    st.header("🐐 Goat Husbandry Products")
     try:
-        st.image("durgivegan_goatfarm2.png", use_container_width=True, caption="Our No-Kill Goat Farm")
+        st.image("durgivegan_goatfarm2.jpg", use_container_width=True, caption="Our No-Kill Goat Farm")
     except:
-        st.warning("Hero image 'durgivegan_goatfarm2.png' not found.")
+        st.warning("Landing image 'durgivegan_goatfarm2.jpg' not found.")
 
-    st.write("### Available Items")
-    
-    # Product List
-    products = [
+    goat_products = [
         {"name": "Goat Milk", "icon": "🥛"},
         {"name": "Goat Curd", "icon": "🥣"},
         {"name": "Goat Butter", "icon": "🧈"},
@@ -94,9 +96,8 @@ elif selection == "Shop Products":
         {"name": "Goat Cheese", "icon": "🍕"}
     ]
 
-    # Grid Display
     cols = st.columns(3)
-    for i, p in enumerate(products):
+    for i, p in enumerate(goat_products):
         with cols[i % 3]:
             st.markdown(f"""
             <div class="product-box">
@@ -105,14 +106,44 @@ elif selection == "Shop Products":
                 <p class="out-of-stock">⚠️ Out of Stock</p>
             </div>
             """, unsafe_allow_html=True)
-            st.write("") # Spacer
+            st.write(" ")
 
-# 6. Farm History (Database Integration)
+# 6. POULTRY PRODUCTS SECTION
+elif selection == "Shop Products from Poultry":
+    st.header("🐔 Ethical Poultry Products")
+    try:
+        st.image("ethicoai_cock.png", use_container_width=True, caption="Compassion-based Poultry Care")
+    except:
+        st.warning("Landing image 'ethicoai_cock.png' not found.")
+
+    poultry_products = [
+        "Unfertilized chicken eggs",
+        "Unfertilized chicken eggs (Desi)",
+        "Unfertilized quail eggs",
+        "Unfertilized turkey eggs",
+        "Unfertilized Chinese Hen eggs",
+        "Unfertilized Emu eggs",
+        "Unfertilized Ostrich eggs"
+    ]
+
+    cols = st.columns(3)
+    for i, name in enumerate(poultry_products):
+        with cols[i % 3]:
+            st.markdown(f"""
+            <div class="product-box">
+                <div style="font-size: 3rem;">🥚</div>
+                <h4 style="margin: 10px 0;">{name}</h4>
+                <p class="out-of-stock">⚠️ Out of Stock</p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.write(" ")
+
+# 7. FARM HISTORY (Database Bridge)
 elif selection == "Farm History":
-    st.header("📜 Farm History (memory.db)")
+    st.header("📜 Farm History & Memory")
     try:
         conn = sqlite3.connect('memory.db')
-        df = pd.read_sql_query("SELECT * FROM history ORDER BY timestamp DESC LIMIT 10", conn)
+        df = pd.read_sql_query("SELECT * FROM history ORDER BY timestamp DESC LIMIT 15", conn)
         st.dataframe(df, use_container_width=True)
         conn.close()
     except:
