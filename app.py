@@ -11,7 +11,6 @@ st.set_page_config(
 # 2. Advanced CSS for "Pop" and Prominent UI
 st.markdown("""
     <style>
-    /* Background and Main Font */
     .main {
         background-color: #F8FAF7;
     }
@@ -21,13 +20,11 @@ st.markdown("""
         padding-top: 2rem;
     }
     
-    /* Headers */
     h1, h2, h3 {
         color: #1B3F17 !important;
         font-family: 'Trebuchet MS', sans-serif;
     }
 
-    /* Prominent Info Cards */
     .ethical-card {
         background: linear-gradient(135deg, #ffffff 0%, #f0f9f0 100%);
         padding: 30px;
@@ -37,7 +34,6 @@ st.markdown("""
         margin-bottom: 2rem;
     }
 
-    /* Product Box "Pop" Effect */
     .product-box {
         background-color: #ffffff;
         padding: 25px;
@@ -57,7 +53,6 @@ st.markdown("""
         border-color: #4A7c44;
     }
 
-    /* Out of Stock Badge */
     .out-of-stock {
         color: #ffffff;
         background-color: #CC3333;
@@ -69,7 +64,6 @@ st.markdown("""
         margin-top: 15px;
     }
     
-    /* Category Header Styles */
     .category-header {
         background-color: #2D5A27;
         color: white;
@@ -81,7 +75,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Sidebar Navigation (Prominent Radio Buttons)
+# 3. Sidebar Navigation
 with st.sidebar:
     try:
         st.image("ethicoai_logo.jpg", use_container_width=True)
@@ -117,19 +111,19 @@ if "🏠 Home" in selection:
     </div>
     """, unsafe_allow_html=True)
 
-    # Value Props
     c1, c2, c3 = st.columns(3)
     c1.metric("Model", "Co-operative")
     c2.metric("Intelligence", "AI-Powered")
     c3.metric("Ethics", "Compassion-Based")
 
-# 5. GOAT PRODUCTS SECTION
+# 5. GOAT PRODUCTS SECTION (Updated to PNG)
 elif "🐐 Shop Goat Products" in selection:
     st.markdown('<div class="category-header"><h1>Goat Husbandry Shop</h1></div>', unsafe_allow_html=True)
     try:
-        st.image("durgivegan_goatfarm2.jpg", use_container_width=True)
+        # Changed from .jpg to .png per your request
+        st.image("durgivegan_goatfarm2.png", use_container_width=True)
     except:
-        st.warning("Landing image 'durgivegan_goatfarm2.jpg' not found.")
+        st.warning("Landing image 'durgivegan_goatfarm2.png' not found.")
 
     goat_items = [
         {"n": "Goat Milk", "i": "🥛"}, {"n": "Goat Curd", "i": "🥣"},
